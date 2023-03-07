@@ -18,10 +18,17 @@ private pokemonService : PokemonService){
 	
 }
 ngOnInit(){
-	this.pokemonList=this.pokemonService.getPokemonList();
+	//this.pokemonList=this.pokemonService.getPokemonList();
 	const pokemonId : string | null = this.route.snapshot.paramMap.get('id');
-	if(pokemonId) this.pokemon=this.pokemonService.getPokemonById(+pokemonId);
+	if(pokemonId) this.pokemonService.getPokemonById(+pokemonId)
+  		.subscribe(pokemon => this.pokemon = pokemon);
 }
+
+deletePokemon(pokemon : Pokemon){
+	this.pokemonService.deletePokemonById(pokemon.id)
+  		.subscribe(() => this.goToPokemonList());
+}
+
 
 goToPokemonList(){
 	this.routelink.navigate(['/pokemons']);

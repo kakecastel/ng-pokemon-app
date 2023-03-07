@@ -10,24 +10,17 @@ import {Router } from '@angular/router';
   ]
 })
 export class ListPokemonComponent {
+
+pokemonlist : Pokemon[];
 constructor(private routelink : Router,
             private pokemonService : PokemonService
-){
+){}
 	
-}
-	pokemons=this.pokemonService.getPokemonList();
-	pokemonSelected : Pokemon | undefined ;
-	selectPokemon(pokemonId : Pokemon){
-    const pokemon : Pokemon |undefined  = this.pokemons.find(pokemon => pokemon.id == +pokemonId.id);
+ngOnInit(){
+  this.pokemonService.getPokemonList()
+  .subscribe(pokemonlist => this.pokemonlist = pokemonlist);
 
-    if(pokemon){
-      console.log(`Vous avez demande le pokemon   ${pokemon.name}`);
-    }
-    else{
-      console.log(`Vous avez demande le pokemon qui n'existe pas `);
-      this.pokemonSelected=pokemon;
-    }
-  }
+}
 
   goToPokemon(pokemon : Pokemon){
 	this.routelink.navigate(['/pokemon',pokemon.id]);

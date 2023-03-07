@@ -10,12 +10,17 @@ import {Router } from '@angular/router';
 export class PokemonFormComponent implements OnInit{
 @Input() pokemon : Pokemon;
 types: Array<string>;
+isAddForm : boolean;
 constructor(private pokemonService : PokemonService,
 private routelink : Router) {
-
+	console.log(this.isAddForm);	
  }
 ngOnInit():void{
 		this.types = this.pokemonService.getPokemonTypeList();
+		//------permet de verifier si l'url courant contient le mot add
+		this.isAddForm = this.routelink.url.includes('add');
+
+		 console.log(`Valeur du booul  ${this.isAddForm}`);
 }
 
 hasType(type : string): boolean{
@@ -44,8 +49,19 @@ hasType(type : string): boolean{
 
  }
  onSubmit() {
- 	 console.log(`sumit form ! `);	
- 	 	this.routelink.navigate(['/pokemon',this.pokemon.id]);
+  console.log(`sumit form ! `);	
+ 	
+ 	if(this.isAddForm)
+ 	{
+ 		this.pokemonService.addPokemon(this.pokemon)
+  			.subscribe((pokemonService) => this.routelink.navigate(['/pokemon',pokemonService?.id]));
+ 	}
+ 	else{
+		this.pokemonService.updatePokemon(this.pokemon)
+		  .subscribe(() => this.routelink.navigate(['/pokemon',this.pokemon.id]));
+
+ 	}
+ 	 	
  }
 
  isTypesValid(type : string) : boolean{
